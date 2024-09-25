@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -35,6 +36,7 @@ public class GameLevelTest {
 
 
     @Test
+    @Timeout(5)
     void levelEndsSuccessfully() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "я"),
@@ -60,6 +62,7 @@ public class GameLevelTest {
     }
 
     @Test
+    @Timeout(5)
     void levelOutputsCorrectInfo() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "я"),
@@ -119,6 +122,7 @@ public class GameLevelTest {
     }
 
     @Test
+    @Timeout(5)
     void wrongInputDoesNotAffectAnything() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "я"),
@@ -180,6 +184,7 @@ public class GameLevelTest {
     }
 
     @Test
+    @Timeout(5)
     void caseDoesNotMatter() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "я"),
@@ -239,6 +244,7 @@ public class GameLevelTest {
     }
 
     @Test
+    @Timeout(5)
     void mistakesWork() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "я"),
@@ -314,6 +320,7 @@ public class GameLevelTest {
     }
 
     @Test
+    @Timeout(5)
     void repeatingLetterDoesNothing() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "я"),
@@ -376,6 +383,7 @@ public class GameLevelTest {
     }
 
     @Test
+    @Timeout(5)
     void clueDisplays() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "я"),
@@ -443,6 +451,7 @@ public class GameLevelTest {
     }
 
     @Test
+    @Timeout(5)
     void gameEndsWhenHittingMaxMistakes() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "а"),
@@ -459,6 +468,7 @@ public class GameLevelTest {
     }
 
     @Test
+    @Timeout(5)
     void wrongCharsDoNotAffectTheGame() {
         when(input.getCommand()).thenReturn(
             new GameInput.Command(GameInput.Command.Type.CHAR, "я"),
