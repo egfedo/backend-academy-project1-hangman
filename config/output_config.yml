@@ -1,0 +1,16 @@
+leftBlockWidth: 49
+rightBlockWidth: 30
+rowCount: 17
+wordTitleRow: 2
+clueTitleRow: 6
+leftBlockCenter: 24
+wordRow: 4
+clueRow: 8
+triesLine: 16
+triesOffset: 63
+poleBeginLine: 3
+poleOffset: 59
+stickmanBeginLine: 7
+stickmanOffset: 66
+lettersBeginLine: 11
+lettersOffset: 9
