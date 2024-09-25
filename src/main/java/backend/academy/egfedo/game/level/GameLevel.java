@@ -3,21 +3,23 @@ package backend.academy.egfedo.game.level;
 import backend.academy.egfedo.data.Word;
 import backend.academy.egfedo.io.GameInput;
 import backend.academy.egfedo.io.LevelOutput;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-public class GameLevel {
+public final class GameLevel {
 
     private final GameInput input;
     private final LevelOutput output;
 
     private final Map<Character, List<Integer>> unsolvedMap = new HashMap<>();
     private final Set<Character> usedLetters = new HashSet<>();
-    private final List<Character> wordDisplay = new ArrayList<>();
+    private final List<Character> wordDisplay;
 
     private final Set<Character> alphabet;
 
@@ -27,13 +29,17 @@ public class GameLevel {
     private int mistakes = 0;
     private final int maxMistakes;
 
-    public GameLevel(GameInput input, LevelOutput output, Word word, int maxMistakes, Set<Character> alphabet) {
-        this.input = input;
-        this.output = output;
+    public GameLevel(GameInput input, LevelOutput output,
+        Word word, int maxMistakes, Set<Character> alphabet) {
+        this.input = Objects.requireNonNull(input, "GameInput must not be null");
+        this.output = Objects.requireNonNull(output, "LevelOutput must not be null");
+
+        Objects.requireNonNull(word, "Word must not be null");
         this.clue = word.clue();
         this.maxMistakes = maxMistakes;
-        this.alphabet = Set.copyOf(alphabet);
+        this.alphabet = Set.copyOf(Objects.requireNonNull(alphabet, "Alphabet must not be null"));
 
+        wordDisplay = new ArrayList<>(word.text().length());
         for (int i = 0; i < word.text().length(); i++) {
             wordDisplay.add('_');
         }
@@ -49,6 +55,8 @@ public class GameLevel {
 
     }
 
+    @SuppressFBWarnings(value = {"SUI_CONTAINS_BEFORE_ADD"},
+        justification = "Need to check if letter hasn't been used before")
     public boolean run() {
         output.displayFrame(
             List.copyOf(wordDisplay),
@@ -65,8 +73,9 @@ public class GameLevel {
                 char data = Character.toLowerCase(cmd.data().charAt(0));
                 if (alphabet.contains(data) && !usedLetters.contains(data)) {
                     usedLetters.add(data);
-                    if (unsolvedMap.containsKey(data)) {
-                        for (var idx : unsolvedMap.get(data)) {
+                    var charData = unsolvedMap.get(data);
+                    if (Objects.nonNull(charData)) {
+                        for (var idx : charData) {
                             wordDisplay.set(idx, data);
                         }
                         unsolvedMap.remove(data);
