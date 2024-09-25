@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import lombok.Getter;
 
 public final class GameLevel {
 
@@ -23,6 +24,8 @@ public final class GameLevel {
 
     private final Set<Character> alphabet;
 
+    @Getter
+    private final String word;
     private final String clue;
     private boolean showClue = false;
 
@@ -35,6 +38,7 @@ public final class GameLevel {
         this.output = Objects.requireNonNull(output, "LevelOutput must not be null");
 
         Objects.requireNonNull(word, "Word must not be null");
+        this.word = word.text();
         this.clue = word.clue();
         this.maxMistakes = maxMistakes;
         this.alphabet = Set.copyOf(Objects.requireNonNull(alphabet, "Alphabet must not be null"));
