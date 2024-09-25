@@ -66,7 +66,7 @@ public final class LevelPrintStreamOutput implements LevelOutput {
             Template.CLUE,
             "                  [ Подсказка ]                  |" + " ".repeat(config.rightBlockWidth()),
             Template.EMPTY_CLUE,
-            "                (Не активирована)                |",
+            "         (Не активирована, введите clue)         |",
             Template.LOGO,
             """
                                                              \s
