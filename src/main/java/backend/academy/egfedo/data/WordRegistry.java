@@ -2,7 +2,8 @@ package backend.academy.egfedo.data;
 
 import java.security.SecureRandom;
 import java.util.Objects;
-
+import java.util.Set;
+import lombok.Getter;
 import static backend.academy.egfedo.util.Utils.randomEnum;
 
 public class WordRegistry {
@@ -100,23 +101,25 @@ public class WordRegistry {
         }
     };
 
+    @Getter private final Set<Character> alphabet =
+        Set.of('а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й',
+            'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у',
+            'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я');
+
     private final SecureRandom random = new SecureRandom();
 
     public Word getRandomWord(Category category, Difficulty difficulty) {
-        if (Objects.isNull(category)) {
-            category = randomEnum(Category.class);
-        }
-        if (Objects.isNull(difficulty)) {
-            difficulty = randomEnum(Difficulty.class);
-        }
-        return switch (category) {
+        Category realCategory = Objects.requireNonNullElse(category, randomEnum(Category.class));
+        Difficulty realDifficulty = Objects.requireNonNullElse(difficulty, randomEnum(Difficulty.class));
+
+        return switch (realCategory) {
             case FRUIT -> {
-                var len = fruitCategory[difficulty.value].length;
-                yield fruitCategory[difficulty.value][random.nextInt(len)];
+                var len = fruitCategory[realDifficulty.value].length;
+                yield fruitCategory[realDifficulty.value][random.nextInt(len)];
             }
             case CITIES -> {
-                var len = citiesCategory[difficulty.value].length;
-                yield citiesCategory[difficulty.value][random.nextInt(len)];
+                var len = citiesCategory[realDifficulty.value].length;
+                yield citiesCategory[realDifficulty.value][random.nextInt(len)];
             }
         };
     }

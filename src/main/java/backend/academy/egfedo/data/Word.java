@@ -4,11 +4,14 @@ import java.util.Objects;
 
 public record Word(String text, String clue) {
     public Word {
-        if (Objects.isNull(text)) {
-            throw new IllegalArgumentException("Field 'text' cannot be null");
+        Objects.requireNonNull(text, "Field 'text' cannot be null");
+        Objects.requireNonNull(clue, "Field 'clue' cannot be null");
+
+        if (text.isEmpty()) {
+            throw new IllegalArgumentException("Field 'text' cannot be an empty string");
         }
-        if (Objects.isNull(clue)) {
-            throw new IllegalArgumentException("Field 'clue' cannot be null");
+        if (clue.isEmpty()) {
+            throw new IllegalArgumentException("Field 'clue' cannot be an empty string");
         }
     }
 }
