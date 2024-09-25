@@ -4,7 +4,6 @@ import backend.academy.egfedo.data.Word;
 import backend.academy.egfedo.io.GameInput;
 import backend.academy.egfedo.io.LevelOutput;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,17 +63,15 @@ public class GameLevel {
 
             if (cmd.type() == GameInput.Command.Type.CHAR) {
                 char data = Character.toLowerCase(cmd.data().charAt(0));
-                if (alphabet.contains(data)) {
-                    if (!usedLetters.contains(data)) {
-                        usedLetters.add(data);
-                        if (unsolvedMap.containsKey(data)) {
-                            for (var idx : unsolvedMap.get(data)) {
-                                wordDisplay.set(idx, data);
-                            }
-                            unsolvedMap.remove(data);
-                        } else {
-                            mistakes++;
+                if (alphabet.contains(data) && !usedLetters.contains(data)) {
+                    usedLetters.add(data);
+                    if (unsolvedMap.containsKey(data)) {
+                        for (var idx : unsolvedMap.get(data)) {
+                            wordDisplay.set(idx, data);
                         }
+                        unsolvedMap.remove(data);
+                    } else {
+                        mistakes++;
                     }
                 }
             }
