@@ -6,7 +6,7 @@ import java.util.Set;
 import lombok.Getter;
 import static backend.academy.egfedo.util.Utils.randomEnum;
 
-public class WordRegistry {
+public final class WordRegistry {
 
     public enum Category {
         FRUIT, CITIES
