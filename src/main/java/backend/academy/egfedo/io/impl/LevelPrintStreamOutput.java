@@ -55,8 +55,8 @@ public final class LevelPrintStreamOutput implements LevelOutput {
     );
 
     public LevelPrintStreamOutput(PrintStream printStream, LevelPrintStreamOutputConfig.ConfigData config) {
-        this.printStream = printStream;
-        this.config = config;
+        this.printStream = Objects.requireNonNull(printStream, "printStream must not be null");
+        this.config = Objects.requireNonNull(config, "config must not be null");
 
         this.stringTemplates = Map.of(
             Template.EMPTY,

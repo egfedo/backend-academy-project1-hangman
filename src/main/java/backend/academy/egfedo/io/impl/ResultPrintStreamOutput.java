@@ -3,6 +3,7 @@ package backend.academy.egfedo.io.impl;
 import backend.academy.egfedo.io.ResultOutput;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Objects;
 
 public final class ResultPrintStreamOutput implements ResultOutput {
 
@@ -32,7 +33,7 @@ public final class ResultPrintStreamOutput implements ResultOutput {
     );
 
     public ResultPrintStreamOutput(PrintStream printStream) {
-        this.printStream = printStream;
+        this.printStream = Objects.requireNonNull(printStream, "printStream cannot be null");
     }
 
     @Override

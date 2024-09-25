@@ -9,7 +9,7 @@ public final class ScannerGameInput implements GameInput {
     private final Scanner scanner;
 
     public ScannerGameInput(Scanner scanner) {
-        this.scanner = Objects.requireNonNull(scanner);
+        this.scanner = Objects.requireNonNull(scanner, "scanner cannot be null");
     }
 
     @Override
