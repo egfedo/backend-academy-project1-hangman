@@ -7,6 +7,7 @@ import backend.academy.egfedo.game.menu.GameMenu;
 import backend.academy.egfedo.game.misc.LevelSupplier;
 import backend.academy.egfedo.io.impl.LevelPrintStreamOutput;
 import backend.academy.egfedo.io.impl.MenuPrintStreamOutput;
+import backend.academy.egfedo.io.impl.ResultPrintStreamOutput;
 import backend.academy.egfedo.io.impl.ScannerGameInput;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Main {
         var config = new LevelPrintStreamOutputConfig("./config/output_config.yml").getData();
         var menuOutput = new MenuPrintStreamOutput(System.out);
         var levelOutput = new LevelPrintStreamOutput(System.out, config);
+        var resultOutput = new ResultPrintStreamOutput(System.out);
 
         var scanner = new Scanner(System.in, StandardCharsets.UTF_8);
         var gameInput = new ScannerGameInput(scanner);
@@ -39,7 +41,7 @@ public class Main {
         );
 
         var diffMenu = new GameMenu(
-            "Choose difficulty:",
+            "Выберите сложность:",
             GameMenu.OptionType.DIFFICULTY,
             List.of("Легко", "Средне", "Сложно", "Случайно"),
             List.of("easy", "medium", "hard", "random"),
@@ -49,7 +51,8 @@ public class Main {
 
         var gameSession = new GameSession(
             List.of(catMenu, diffMenu),
-            levelSupplier
+            levelSupplier,
+            resultOutput
         );
 
         gameSession.run();
