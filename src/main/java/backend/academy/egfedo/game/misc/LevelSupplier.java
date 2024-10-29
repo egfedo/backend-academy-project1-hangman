@@ -34,46 +34,19 @@ public final class LevelSupplier {
     }
 
     @SuppressWarnings({"MultipleStringLiterals"})
-    public GameLevel getLevel(Map<GameMenu.OptionType, String> options) {
-        Objects.requireNonNull(options, "Options must not be null");
+    public GameLevel getLevel(WordRegistry.Category category, WordRegistry.Difficulty difficulty) {
 
-        if (!options.containsKey(GameMenu.OptionType.CATEGORY)) {
-            throw new IllegalArgumentException("Options must contain a category entry");
-        }
 
-        if (!options.containsKey(GameMenu.OptionType.DIFFICULTY)) {
-            throw new IllegalArgumentException("Options must contain a difficulty entry");
-        }
-
-        var categoryStr = options.get(GameMenu.OptionType.CATEGORY);
-        WordRegistry.Category category = switch (categoryStr) {
-            case "fruits" -> WordRegistry.Category.FRUIT;
-            case "cities" -> WordRegistry.Category.CITIES;
-            case "random" -> null;
-            default -> throw new IllegalArgumentException("Unexpected value for category: '" + categoryStr + "'");
-        };
-
-        var difficultyStr = options.get(GameMenu.OptionType.DIFFICULTY);
-        WordRegistry.Difficulty difficulty = switch (difficultyStr) {
-            case "easy" -> WordRegistry.Difficulty.EASY;
-            case "medium" -> WordRegistry.Difficulty.MEDIUM;
-            case "hard" -> WordRegistry.Difficulty.HARD;
-            case "random" -> null;
-            default -> throw new IllegalArgumentException("Unexpected value for difficulty: '" + difficultyStr + "'");
-        };
-
-        int tries;
-        if ("random".equals(difficultyStr)) {
-            var values = difficultyMappings.values().stream().toList();
-            tries = values.get(random.nextInt(values.size()));
-        } else {
-            tries = difficultyMappings.get(difficultyStr);
-        }
+        var difficultyValues = WordRegistry.Difficulty.values();
+        WordRegistry.Difficulty realDifficulty =
+            difficulty == WordRegistry.Difficulty.RANDOM
+                ? difficultyValues[random.nextInt(difficultyValues.length)-1]
+                : difficulty;
 
         return new GameLevel(
             gameInput, levelOutput,
-            registry.getRandomWord(category, difficulty),
-            tries,
+            registry.getRandomWord(category, realDifficulty),
+            realDifficulty.maxErrors,
             registry.alphabet()
         );
     }
