@@ -1,8 +1,9 @@
 package backend.academy.egfedo.game.misc;
 
+import backend.academy.egfedo.data.Category;
+import backend.academy.egfedo.data.Difficulty;
 import backend.academy.egfedo.data.WordRegistry;
 import backend.academy.egfedo.game.level.GameLevel;
-import backend.academy.egfedo.game.menu.GameMenu;
 import backend.academy.egfedo.io.GameInput;
 import backend.academy.egfedo.io.LevelOutput;
 import java.security.SecureRandom;
@@ -34,12 +35,12 @@ public final class LevelSupplier {
     }
 
     @SuppressWarnings({"MultipleStringLiterals"})
-    public GameLevel getLevel(WordRegistry.Category category, WordRegistry.Difficulty difficulty) {
+    public GameLevel getLevel(Category category, Difficulty difficulty) {
 
 
-        var difficultyValues = WordRegistry.Difficulty.values();
-        WordRegistry.Difficulty realDifficulty =
-            difficulty == WordRegistry.Difficulty.RANDOM
+        var difficultyValues = Difficulty.values();
+        Difficulty realDifficulty =
+            difficulty == Difficulty.RANDOM
                 ? difficultyValues[random.nextInt(difficultyValues.length)-1]
                 : difficulty;
 
