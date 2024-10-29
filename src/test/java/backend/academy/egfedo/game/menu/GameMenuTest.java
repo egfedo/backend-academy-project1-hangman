@@ -1,9 +1,13 @@
 package backend.academy.egfedo.game.menu;
 
+import backend.academy.egfedo.data.Category;
+import backend.academy.egfedo.data.Difficulty;
 import backend.academy.egfedo.io.GameInput;
 import backend.academy.egfedo.io.MenuOutput;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -35,52 +39,20 @@ public class GameMenuTest {
     void nullCheck() {
 
         assertThatThrownBy(
-            () -> new GameMenu(null, GameMenu.OptionType.CATEGORY,
-                notEmptyList, notEmptyList, output, input)
+            () -> new GameMenu<>(null, output, input, Category.class)
         ).isInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(
-            () -> new GameMenu("", null,
-                notEmptyList, notEmptyList, output, input)
+            () -> new GameMenu<>("", null, input, Category.class)
         ).isInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(
-            () -> new GameMenu("", GameMenu.OptionType.CATEGORY,
-                null, notEmptyList, output, input)
+            () -> new GameMenu<>("", output, null, Category.class)
         ).isInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(
-            () -> new GameMenu("", GameMenu.OptionType.CATEGORY,
-                notEmptyList, null, output, input)
+            () -> new GameMenu<>("", output, input, null)
         ).isInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(
-            () -> new GameMenu("", GameMenu.OptionType.CATEGORY,
-                notEmptyList, notEmptyList, null, input)
-        ).isInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(
-            () -> new GameMenu("", GameMenu.OptionType.CATEGORY,
-                notEmptyList, notEmptyList, output, null)
-        ).isInstanceOf(NullPointerException.class);
-    }
-
-    private static Stream<Arguments> listContentsCheckProvider() {
-        return Stream.of(
-            Arguments.of(List.of(), List.of("arg")),
-            Arguments.of(List.of("arg"), List.of()),
-            Arguments.of(List.of("arg", "arg2"), List.of("argD"))
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("listContentsCheckProvider")
-    @Timeout(3)
-    void listContentsCheck(List<String> options, List<String> optionData) {
-        assertThatThrownBy(
-            () -> new GameMenu("title", GameMenu.OptionType.CATEGORY,
-                options, optionData, output, input)
-        );
     }
 
 
@@ -89,28 +61,25 @@ public class GameMenuTest {
     void runReturnsCorrectly() {
         when(input.getCommand())
             .thenReturn(new GameInput.Command(GameInput.Command.Type.CHAR, "1"));
-        var menu = new GameMenu("category", GameMenu.OptionType.CATEGORY,
-            notEmptyList, notEmptyList, output, input);
-        var options = new HashMap<GameMenu.OptionType, String>();
+        var menu = new GameMenu<>("category", output, input, Category.class);
 
-        menu.run(options);
+        menu.run();
 
         InOrder inOrder = inOrder(output);
-        inOrder.verify(output).displayMenu("category", notEmptyList);
+        inOrder.verify(output)
+            .displayMenu("category", Arrays.stream(Category.values())
+                .map(Objects::toString).toList());
 
-        assertThat(options).containsEntry(GameMenu.OptionType.CATEGORY, "option");
 
     }
 
     private static Stream<Arguments> runReturnsCorrectValuesProvider() {
         return Stream.of(
             Arguments.of(
-                "difficulty", GameMenu.OptionType.DIFFICULTY,
-                notEmptyList, 1
+                "difficulty", Difficulty.class, 1, Difficulty.EASY
             ),
             Arguments.of(
-                "category", GameMenu.OptionType.CATEGORY,
-                List.of("option1", "option2"), 2
+                "category", Category.class, 2, Category.CITIES
             )
         );
     }
@@ -118,24 +87,23 @@ public class GameMenuTest {
     @ParameterizedTest()
     @MethodSource("runReturnsCorrectValuesProvider")
     @Timeout(3)
-    void runReturnsCorrectValues(String menuName, GameMenu.OptionType optionType,
-        List<String> options, int inputInt) {
+    <T extends Enum<T>> void runReturnsCorrectValues(String menuName, Class<T> optionType,
+        int inputInt, T expectedOutput) {
         when(input.getCommand())
             .thenReturn(new GameInput.Command(GameInput.Command.Type.CHAR,
                 Integer.toString(inputInt)));
-        var menu = new GameMenu(menuName, optionType,
-            options, options, output, input);
-        var optionMap = new HashMap<GameMenu.OptionType, String>();
 
-        menu.run(optionMap);
+        var menu = new GameMenu<>(menuName, output, input, optionType);
+
+        T enumVal = menu.run();
+
+        assertThat(enumVal).isEqualTo(expectedOutput);
 
         InOrder inOrder = inOrder(output);
-        inOrder.verify(output).displayMenu(menuName, options);
+        inOrder.verify(output).displayMenu(menuName,
+            Arrays.stream(optionType.getEnumConstants())
+                .map(Objects::toString).toList());
 
-        assertThat(optionMap).containsEntry(
-            optionType,
-            options.get(inputInt-1)
-        );
 
     }
 
@@ -155,13 +123,15 @@ public class GameMenuTest {
                     "1")
                 );
 
-        var menu = new GameMenu("menu", GameMenu.OptionType.CATEGORY,
-            notEmptyList, notEmptyList, output, input);
+        var menu = new GameMenu<>("menu", output, input, Category.class);
 
-        menu.run(new HashMap<>());
+        menu.run();
 
         InOrder inOrder = inOrder(output);
 
-        inOrder.verify(output, times(4)).displayMenu("menu", notEmptyList);
+        inOrder.verify(output, times(4))
+            .displayMenu("menu",
+                Arrays.stream(Category.values())
+                    .map(Objects::toString).toList());
     }
 }
