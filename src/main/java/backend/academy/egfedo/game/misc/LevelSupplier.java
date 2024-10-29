@@ -7,7 +7,6 @@ import backend.academy.egfedo.game.level.GameLevel;
 import backend.academy.egfedo.io.GameInput;
 import backend.academy.egfedo.io.LevelOutput;
 import java.security.SecureRandom;
-import java.util.Map;
 import java.util.Objects;
 
 public final class LevelSupplier {
