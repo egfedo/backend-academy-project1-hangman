@@ -9,7 +9,8 @@ import static backend.academy.egfedo.util.Utils.randomEnum;
 public final class WordRegistry {
 
     public enum Category {
-        FRUIT("Фрукты"), CITIES("Города");
+        FRUIT("Фрукты"), CITIES("Города"),
+        RANDOM("Случайно");
 
         final String description;
 
@@ -29,7 +30,7 @@ public final class WordRegistry {
         HARD(2, 4, "Сложно"), RANDOM(-1, -1, "Случайно");
 
         private final int value;
-        final int maxErrors;
+        public final int maxErrors;
         private final String description;
 
         Difficulty(int value, int maxErrors, String description) {
@@ -130,17 +131,20 @@ public final class WordRegistry {
     private final SecureRandom random = new SecureRandom();
 
     public Word getRandomWord(Category category, Difficulty difficulty) {
-        Category realCategory = Objects.requireNonNullElse(category, randomEnum(Category.class));
-        Difficulty realDifficulty = Objects.requireNonNullElse(difficulty, randomEnum(Difficulty.class));
+        Category realCategory = category;
+        if (category == Category.RANDOM) {
+            realCategory = Category.values()[random.nextInt(Category.values().length-1)];
+        }
         return switch (realCategory) {
             case FRUIT -> {
-                var len = fruitCategory[realDifficulty.value].length;
-                yield fruitCategory[realDifficulty.value][random.nextInt(len)];
+                var len = fruitCategory[difficulty.value].length;
+                yield fruitCategory[difficulty.value][random.nextInt(len)];
             }
             case CITIES -> {
-                var len = citiesCategory[realDifficulty.value].length;
-                yield citiesCategory[realDifficulty.value][random.nextInt(len)];
+                var len = citiesCategory[difficulty.value].length;
+                yield citiesCategory[difficulty.value][random.nextInt(len)];
             }
+            default -> throw new IllegalStateException("Unexpected value: " + realCategory);
         };
     }
 }
