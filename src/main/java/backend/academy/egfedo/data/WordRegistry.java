@@ -2,7 +2,6 @@ package backend.academy.egfedo.data;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,7 +107,7 @@ public final class WordRegistry {
         Category realCategory = category;
 
         if (category == Category.RANDOM) {
-            realCategory = Category.values()[random.nextInt(Category.values().length-1)];
+            realCategory = Category.values()[random.nextInt(Category.values().length - 1)];
         }
         if (category == Category.RANDOM) {
             throw new IllegalStateException("Category must not be RANDOM at this point");
