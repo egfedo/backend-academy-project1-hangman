@@ -9,17 +9,38 @@ import static backend.academy.egfedo.util.Utils.randomEnum;
 public final class WordRegistry {
 
     public enum Category {
-        FRUIT, CITIES
+        FRUIT("Фрукты"), CITIES("Города");
+
+        final String description;
+
+        Category(String description) {
+            this.description = description;
+        }
+
+        @Override
+        public String toString() {
+           return description;
+        }
     }
 
     public enum Difficulty {
 
-        EASY(0), MEDIUM(1), HARD(2);
+        EASY(0, 11, "Легко"), MEDIUM(1, 7, "Средне"),
+        HARD(2, 4, "Сложно"), RANDOM(-1, -1, "Случайно");
 
         private final int value;
+        final int maxErrors;
+        private final String description;
 
-        Difficulty(int value) {
+        Difficulty(int value, int maxErrors, String description) {
             this.value = value;
+            this.maxErrors = maxErrors;
+            this.description = description;
+        }
+
+        @Override
+        public String toString() {
+            return description;
         }
     }
 
@@ -111,7 +132,6 @@ public final class WordRegistry {
     public Word getRandomWord(Category category, Difficulty difficulty) {
         Category realCategory = Objects.requireNonNullElse(category, randomEnum(Category.class));
         Difficulty realDifficulty = Objects.requireNonNullElse(difficulty, randomEnum(Difficulty.class));
-
         return switch (realCategory) {
             case FRUIT -> {
                 var len = fruitCategory[realDifficulty.value].length;
