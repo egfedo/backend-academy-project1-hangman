@@ -1,6 +1,7 @@
 package backend.academy;
 
 import backend.academy.egfedo.config.io.LevelPrintStreamOutputConfig;
+import backend.academy.egfedo.data.Word;
 import backend.academy.egfedo.data.WordRegistry;
 import backend.academy.egfedo.game.GameSession;
 import backend.academy.egfedo.game.menu.GameMenu;
@@ -31,26 +32,23 @@ public class Main {
         var registry = new WordRegistry();
         var levelSupplier = new LevelSupplier(levelOutput, gameInput, registry);
 
-        var catMenu = new GameMenu(
+        GameMenu<WordRegistry.Category> catMenu = new GameMenu<>(
             "Выберите категорию:",
-            GameMenu.OptionType.CATEGORY,
-            List.of("Фрукты", "Города", "Случайно"),
-            List.of("fruits", "cities", "random"),
             menuOutput,
-            gameInput
+            gameInput,
+            WordRegistry.Category.class
         );
 
-        var diffMenu = new GameMenu(
+        GameMenu<WordRegistry.Difficulty> diffMenu = new GameMenu<>(
             "Выберите сложность:",
-            GameMenu.OptionType.DIFFICULTY,
-            List.of("Легко", "Средне", "Сложно", "Случайно"),
-            List.of("easy", "medium", "hard", "random"),
             menuOutput,
-            gameInput
+            gameInput,
+            WordRegistry.Difficulty.class
         );
 
         var gameSession = new GameSession(
-            List.of(catMenu, diffMenu),
+            catMenu,
+            diffMenu,
             levelSupplier,
             resultOutput
         );
