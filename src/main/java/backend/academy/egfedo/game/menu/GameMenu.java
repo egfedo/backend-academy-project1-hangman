@@ -2,61 +2,47 @@ package backend.academy.egfedo.game.menu;
 
 import backend.academy.egfedo.io.GameInput;
 import backend.academy.egfedo.io.MenuOutput;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public final class GameMenu {
+public final class GameMenu<T extends Enum<T>> {
 
     private final String title;
-    private final OptionType optionType;
-    private final List<String> options;
-    private final List<String> optionData;
     private final MenuOutput output;
     private final GameInput input;
+    private final Class<T> enumClass;
 
-    public GameMenu(String title, OptionType optionType,
-        List<String> options, List<String> optionData,
-        MenuOutput output, GameInput input) {
+    public GameMenu(String title,
+        MenuOutput output, GameInput input, Class<T> enumClass) {
         this.title = Objects.requireNonNull(title, "title cannot be null");
-        this.optionType = Objects.requireNonNull(optionType, "optionType cannot be null");
-        this.options = Objects.requireNonNull(options, "options cannot be null");
-        this.optionData = Objects.requireNonNull(optionData, "optionData cannot be null");
         this.output = Objects.requireNonNull(output, "output cannot be null");
         this.input = Objects.requireNonNull(input, "input cannot be null");
-
-        if (options.isEmpty()) {
-            throw new IllegalArgumentException("options cannot be empty");
-        }
-        if (optionData.isEmpty()) {
-            throw new IllegalArgumentException("optionData cannot be empty");
-        }
-        if (options.size() != optionData.size()) {
-            throw new IllegalArgumentException("options and optionData lengths don't match");
-        }
+        this.enumClass = Objects.requireNonNull(enumClass, "enumClass cannot be null");
     }
 
-    public enum OptionType {
-        CATEGORY, DIFFICULTY
-    }
-
-    public void run(Map<OptionType, String> options) {
-        output.displayMenu(this.title, this.options);
+    public T run() {
+        var optionStrings = Arrays.stream(this.enumClass.getEnumConstants())
+            .map(Objects::toString).toList();
+        output.displayMenu(
+            this.title,
+            optionStrings
+        );
 
         while (true) {
             var cmd = input.getCommand();
             String data = cmd.data();
             try {
                 int in = Integer.parseInt(data) - 1;
-                if (in >= 0 && in < this.options.size()) {
-                    options.put(this.optionType, this.optionData.get(in));
-                    return;
+                if (in >= 0 && in < this.enumClass.getEnumConstants().length) {
+                    return this.enumClass.getEnumConstants()[in];
                 }
             } catch (NumberFormatException e) {
 
             }
 
-            output.displayMenu(this.title, this.options);
+            output.displayMenu(this.title, optionStrings);
         }
     }
 
