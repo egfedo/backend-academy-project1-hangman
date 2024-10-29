@@ -1,11 +1,11 @@
 package backend.academy.egfedo.game.misc;
 
+import backend.academy.egfedo.data.Category;
+import backend.academy.egfedo.data.Difficulty;
 import backend.academy.egfedo.data.Word;
 import backend.academy.egfedo.data.WordRegistry;
-import backend.academy.egfedo.game.menu.GameMenu;
 import backend.academy.egfedo.io.GameInput;
 import backend.academy.egfedo.io.LevelOutput;
-import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,38 +42,6 @@ public class LevelSupplierTest {
         ).isInstanceOf(NullPointerException.class);
     }
 
-    @Test
-    void missingOptionsCheck() {
-        var levelSupplier = new LevelSupplier(output, input, registry);
-        assertThatThrownBy(
-            () -> levelSupplier.getLevel(Map.of())
-        ).isInstanceOf(IllegalArgumentException.class);
-
-        assertThatThrownBy(
-            () -> levelSupplier.getLevel(Map.of(GameMenu.OptionType.DIFFICULTY, "hard"))
-        ).isInstanceOf(IllegalArgumentException.class);
-
-        assertThatThrownBy(
-            () -> levelSupplier.getLevel(Map.of(GameMenu.OptionType.CATEGORY, "fruits"))
-        ).isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void wrongOptionsCheck() {
-        var levelSupplier = new LevelSupplier(output, input, registry);
-        assertThatThrownBy(
-            () -> levelSupplier.getLevel(
-                Map.of(GameMenu.OptionType.DIFFICULTY, "hard",
-                    GameMenu.OptionType.CATEGORY, "vegetables"
-                ))
-        ).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(
-            () -> levelSupplier.getLevel(
-                Map.of(GameMenu.OptionType.DIFFICULTY, "eazy",
-                    GameMenu.OptionType.CATEGORY, "fruits"
-                ))
-        ).isInstanceOf(IllegalArgumentException.class);
-    }
 
     @Test
     void correctCallsToRegistry() {
@@ -84,32 +52,31 @@ public class LevelSupplierTest {
         var levelSupplier = new LevelSupplier(output, input, registry);
 
         levelSupplier.getLevel(
-            Map.of(GameMenu.OptionType.CATEGORY, "fruits",
-                GameMenu.OptionType.DIFFICULTY, "easy")
+            Category.FRUIT,
+            Difficulty.EASY
         );
 
         levelSupplier.getLevel(
-            Map.of(GameMenu.OptionType.CATEGORY, "cities",
-                GameMenu.OptionType.DIFFICULTY, "easy")
+            Category.CITIES,
+            Difficulty.EASY
         );
 
         levelSupplier.getLevel(
-            Map.of(GameMenu.OptionType.CATEGORY, "fruits",
-                GameMenu.OptionType.DIFFICULTY, "hard")
+           Category.FRUIT, Difficulty.HARD
         );
 
         InOrder order = inOrder(registry);
         order.verify(registry).getRandomWord(
-            WordRegistry.Category.FRUIT,
-            WordRegistry.Difficulty.EASY
+            Category.FRUIT,
+            Difficulty.EASY
         );
         order.verify(registry).getRandomWord(
-            WordRegistry.Category.CITIES,
-            WordRegistry.Difficulty.EASY
+            Category.CITIES,
+            Difficulty.EASY
         );
         order.verify(registry).getRandomWord(
-            WordRegistry.Category.FRUIT,
-            WordRegistry.Difficulty.HARD
+            Category.FRUIT,
+            Difficulty.HARD
         );
     }
  }
