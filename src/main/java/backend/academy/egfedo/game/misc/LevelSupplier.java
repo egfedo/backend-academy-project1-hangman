@@ -18,12 +18,6 @@ public final class LevelSupplier {
 
     private final SecureRandom random = new SecureRandom();
 
-    @SuppressWarnings({"MultipleStringLiterals"})
-    private final Map<String, Integer> difficultyMappings = Map.of(
-        "easy", 11,
-        "medium", 7,
-        "hard", 4
-    );
 
     public LevelSupplier(
         LevelOutput levelOutput, GameInput gameInput,
