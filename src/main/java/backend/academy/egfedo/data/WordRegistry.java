@@ -1,49 +1,10 @@
 package backend.academy.egfedo.data;
 
 import java.security.SecureRandom;
-import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
-import static backend.academy.egfedo.util.Utils.randomEnum;
 
 public final class WordRegistry {
-
-    public enum Category {
-        FRUIT("Фрукты"), CITIES("Города"),
-        RANDOM("Случайно");
-
-        final String description;
-
-        Category(String description) {
-            this.description = description;
-        }
-
-        @Override
-        public String toString() {
-           return description;
-        }
-    }
-
-    public enum Difficulty {
-
-        EASY(0, 11, "Легко"), MEDIUM(1, 7, "Средне"),
-        HARD(2, 4, "Сложно"), RANDOM(-1, -1, "Случайно");
-
-        private final int value;
-        public final int maxErrors;
-        private final String description;
-
-        Difficulty(int value, int maxErrors, String description) {
-            this.value = value;
-            this.maxErrors = maxErrors;
-            this.description = description;
-        }
-
-        @Override
-        public String toString() {
-            return description;
-        }
-    }
 
     private final Word[][] fruitCategory = {
         {
