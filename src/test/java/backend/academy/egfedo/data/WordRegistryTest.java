@@ -48,12 +48,12 @@ public class WordRegistryTest {
     @DisplayName("Category of the word matches the argument")
     void categoryMatchesTheArgument() {
         assertThat(
-            wordRegistry.getRandomWord(WordRegistry.Category.FRUIT, null)
+            wordRegistry.getRandomWord(Category.FRUIT, null)
                 .text()
         ).isIn(fruitWords);
 
         assertThat(
-            wordRegistry.getRandomWord(WordRegistry.Category.CITIES, null)
+            wordRegistry.getRandomWord(Category.CITIES, null)
                 .text()
         ).isIn(cityWords);
     }
@@ -62,12 +62,12 @@ public class WordRegistryTest {
     @DisplayName("Difficulty of the word matches the argument")
     void difficultyMatchesTheArgument() {
         assertThat(
-            wordRegistry.getRandomWord(WordRegistry.Category.FRUIT, WordRegistry.Difficulty.HARD)
+            wordRegistry.getRandomWord(Category.FRUIT, Difficulty.HARD)
                 .text()
         ).isIn(fruitHard);
 
         assertThat(
-            wordRegistry.getRandomWord(null, WordRegistry.Difficulty.HARD)
+            wordRegistry.getRandomWord(null, Difficulty.HARD)
                 .text()
         ).isIn(hardWords);
     }
