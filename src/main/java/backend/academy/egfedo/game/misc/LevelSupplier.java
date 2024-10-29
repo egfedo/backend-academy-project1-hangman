@@ -41,7 +41,7 @@ public final class LevelSupplier {
         var difficultyValues = Difficulty.values();
         Difficulty realDifficulty =
             difficulty == Difficulty.RANDOM
-                ? difficultyValues[random.nextInt(difficultyValues.length)-1]
+                ? difficultyValues[random.nextInt(difficultyValues.length) - 1]
                 : difficulty;
 
         return new GameLevel(
