@@ -10,9 +10,9 @@ import backend.academy.egfedo.io.impl.LevelPrintStreamOutput;
 import backend.academy.egfedo.io.impl.MenuPrintStreamOutput;
 import backend.academy.egfedo.io.impl.ResultPrintStreamOutput;
 import backend.academy.egfedo.io.impl.ScannerGameInput;
-import lombok.experimental.UtilityClass;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Game {

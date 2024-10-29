@@ -3,8 +3,6 @@ package backend.academy.egfedo.game.menu;
 import backend.academy.egfedo.io.GameInput;
 import backend.academy.egfedo.io.MenuOutput;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public final class GameMenu<T extends Enum<T>> {
